@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        ASCII Disco - The missing runtime type checker for Python
+    </title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&Lexend+Deca&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css">
+    <link rel="stylesheet" href="base.css">
+</head>
+
+<body>
+
+<a href="/" class="title">ASCII<br>DISCO</a>
+
+
+    <div class="art-container">
+    <pre class="art" style="color: grey">
+    _          _          _          _          _
+  >(')____,  >(')____,  >(')____,  >(')____,  >(') ___,
+    (` =~~/    (` =~~/    (` =~~/    (` =~~/    (` =~~/
+~^~^`---'~^~^~^`---'~^~^~^`---'~^~^~^`---'~^~^~^`---'~^~^~
+    </pre>
+    </div>
+
+    <h2><a href="/missing-type-checker">The missing runtime type checker for Python</a></h2>
+    <main>
+        <p>
+            Python's typing module is a great tool for avoiding dumb type errors.
+            But it doesn't make python a typed <i>language</i>.
+            The interpreter is still the same duck-typed goo that we all love.
+        </p>
+        <b>Background</b>
+        <p>
+            The interpreter doesn't have any special knowledge about the types in the <code>typing</code> module.
+        </p>
+        <pre><code class="python">names: typing.List[str] = ["guido", "tim", "barry"]</code></pre>
+        <p>
+            From the perspective of the interpreter, name is a <code>list</code>.
+        </p>
+    </main>
+
+
+<div class="art-container">
+    <pre class="art" style="color: grey">
+ .....................................................................
+.   o   \ o /  _ o        __|    \ /     |__         o _  \ o /   o   .
+.  /|\    |     /\   __\o   \o    |    o/     o/__   /\     |    /|\  .
+.  / \   / \   | \  /) |    ( \  /o\  / )    |   (\  / |   / \   / \  .
+ .....................................................................
+    </pre>
+</div>
+
+<footer>
+    <p>
+        <a target="_blank" href="https://twitter.com/devxpy"><img height="28em" alt="Twitter Follow"
+                                                                  src="https://img.shields.io/twitter/follow/devxpy?style=social"></a>
+        <a target="_blank" href="http://github.com/devxpy"><img height="28em" alt="GitHub followers"
+                                                                src="https://img.shields.io/github/followers/devxpy?style=social"></a>
+    </p>
+    <p>
+        Art stolen from the <a target="_blank" href="https://www.asciiart.eu/">ASCII Art Archive</a>.
+    </p>
+</footer>
+
+<script src="base.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+
+</body>
+</html>

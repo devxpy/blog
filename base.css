@@ -31,11 +31,17 @@ body {
     margin-right: -100%;
 }
 
+main code, pre {
+    background: #f0f0f0;
+    padding: 2px;
+    border-radius: 5px;
+}
+
 h1, h2, h3 {
     margin: 0;
     padding: 1%;
     text-align: center;
-    color: indigo;
+    background: linear-gradient(to right, #1a2980, #26d0ce); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 main {
