@@ -41,7 +41,9 @@ h1, h2, h3 {
     margin: 0;
     padding: 1%;
     text-align: center;
-    background: linear-gradient(to right, #1a2980, #26d0ce); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #1a2980, #26d0ce);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 main {
