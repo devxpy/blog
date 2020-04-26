@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-staticjinja watch --static static --outpath public
+staticjinja watch --static static
