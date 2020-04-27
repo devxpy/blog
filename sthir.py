@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
 import os
 import shutil
+import subprocess
 import typing
 from itertools import chain
 from pathlib import Path
@@ -21,7 +23,7 @@ class JinjaStaticFiles(StaticFiles):
     async def lookup_path(
         self, path: str
     ) -> typing.Tuple[str, typing.Optional[os.stat_result]]:
-        # enable lookup of files without the .html suffix
+        # enable lookup of files without the html suffix
         html_files = Path(self.directory).rglob("*.html")
         if path in (f.stem for f in html_files):
             path += ".html"
@@ -46,6 +48,9 @@ class JinjaStaticFiles(StaticFiles):
 @click.command()
 @click.argument("SRC", type=click.Path(exists=True, file_okay=False, resolve_path=True))
 def serve(src):
+    subprocess.Popen(
+        ["browser-sync", "start", "--proxy", "localhost:8000", "--files", f"{src}/**/*"]
+    )
     app = JinjaStaticFiles(directory=src, html=True)
     uvicorn.run(app)
 
