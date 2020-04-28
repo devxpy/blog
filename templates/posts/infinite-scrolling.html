@@ -2,6 +2,8 @@
 
 {% set post = posts[1] %}
 
+{% block graphic %}{% include 'vines.txt' %}{% endblock %}
+
 {% macro infinite_loop(child) %}
     <div class="infinite-loop--outer">
         <div>

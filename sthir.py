@@ -19,7 +19,6 @@ _global_options = [
         default="templates",
         type=click.Path(exists=True, file_okay=False, resolve_path=True),
     ),
-    click.option("--exclude", "-e"),
     click.option(
         "--context",
         "-c",
@@ -108,6 +107,7 @@ def serve(templates_dir, context, static_dir):
     default="public",
     type=click.Path(file_okay=False, resolve_path=True),
 )
+@click.option("--exclude", "-e")
 @global_options
 def build(templates_dir, output_dir, context, static_dir, exclude):
     templates_dir = Path(templates_dir)
