@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
     <title>
         ASCII DISCO - {% block title %}{% endblock %}
     </title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Monoton&Lexend+Deca&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Monoton&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css">
 
     <link rel="stylesheet" href="/static/base.css">
@@ -16,31 +18,39 @@
 </head>
 <body>
 
-<a href="/" class="title">ASCII<br>DISCO</a>
+<div class="body">
+    <a href="/" class="title">ASCII<br>DISCO</a>
+</div>
 
 <div class="infinite-loop--outer">
     <div>
-        <div class="infinite-loop"><div class="infinite-loop--content"><pre style="display:inline-block;">{% block graphic %}{% endblock %}</pre></div></div>
+        <div class="infinite-loop">
+            <div class="infinite-loop--content">
+                <pre style="display:inline-block;">{% block graphic %}{% endblock %}</pre>
+            </div>
+        </div>
     </div>
 </div>
 
-{% block body %}{% endblock %}
+<div class="body">
+    {% block body %}{% endblock %}
 
-<footer>
-    <p>
-        <a target="_blank" href="https://twitter.com/devxpy"><img height="28em" alt="Twitter Follow"
-                                                                  src="https://img.shields.io/twitter/follow/devxpy?style=social"></a>
-        <a target="_blank" href="http://github.com/devxpy"><img height="28em" alt="GitHub followers"
-                                                                src="https://img.shields.io/github/followers/devxpy?style=social"></a>
-    </p>
-    <p>
-        Art stolen from the <a target="_blank" href="https://www.asciiart.eu/">ASCII Art Archive</a>
-        |
-        Rendered using <a target="_blank" href="https://jinja.palletsprojects.com/en/2.11.x/">Jinja</a>
-        |
-        Source code on <a target="_blank" href="https://github.com/devxpy/blog">GitHub</a>
-    </p>
-</footer>
+    <footer>
+        <p>
+            <a target="_blank" href="https://twitter.com/devxpy"><img height="28em" alt="Twitter Follow"
+                                                                      src="https://img.shields.io/twitter/follow/devxpy?style=social"></a>
+            <a target="_blank" href="http://github.com/devxpy"><img height="28em" alt="GitHub followers"
+                                                                    src="https://img.shields.io/github/followers/devxpy?style=social"></a>
+        </p>
+        <p>
+            Art stolen from the <a target="_blank" href="https://www.asciiart.eu/">ASCII Art Archive</a>
+            |
+            Rendered using <a target="_blank" href="https://jinja.palletsprojects.com/en/2.11.x/">Jinja</a>
+            |
+            Source code on <a target="_blank" href="https://github.com/devxpy/blog">GitHub</a>
+        </p>
+    </footer>
+</div>
 
 <script src="/static/infinite-loop.js"></script>
 

@@ -1,25 +1,32 @@
 body {
-    font-size: 1.2em;
-    max-width: 70vw;
     margin: auto;
-    font-family: 'Lexend Deca', sans-serif;
+    padding: 0;
+    border: none;
 }
 
-@media only screen and (max-width: 600px) {
-    body {
-        max-width: 95vw;
-    }
+.body {
+    font-size: 1.2em;
+    margin: auto;
+    font-family: 'Lexend Deca', sans-serif;
+    max-width: 75vw;
 }
 
 @media only screen and (max-width: 800px) {
-    body {
-        max-width: 80vw;
+    .body {
+        max-width: 95vw;
     }
 }
 
 main {
     min-height: 50vh;
-    padding: 5%;
+    padding: 3%;
+    overflow-x: scroll;
+}
+
+@media only screen and (max-width: 800px) {
+    main {
+        padding: 1%;
+    }
 }
 
 td {

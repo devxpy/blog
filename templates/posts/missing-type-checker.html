@@ -4,35 +4,33 @@
 {% block graphic %}{% include 'duck.txt' %}{% endblock %}
 
 {% block content %}
-    <main>
-        <p>
-            The <code>typing</code> module doesn't make python a statically typed language.
-            The interpreter is still the same duck-typed goo that we all love.
-        </p>
-        <p>
-            The interpreter doesn't have any special knowledge about the types in the <code>typing</code> module.
-            It <i>semantically ignores</i> all type annotations in code.
-        </p>
-        <p>
-            Take the following snippet -
-        </p>
-        <pre><code>names: typing.List[str] = ["guido", "tim", "barry"]</code></pre>
-        <p>
-            From the perspective of the interpreter, the object pointed to by <code>names</code> is a <code>list</code>.
-            There's no discrimination based on the specific container type.
-            <code>typing.List&lt;typing.Any&gt;</code>, <code>typing.List&lt;int&gt;</code> and <code>typing.List&lt;bool&gt;</code>
-            are all the same <code>list</code> type, internally.
-        </p>
-        <p>
-            Which is the reason why the following, surprisingly, raises a <code>TypeError</code> -
-        </p>
-        <pre><code>isinstance(names, typing.List[str])</code></pre>
-        <p>
-            This is all very unfortunate. All that work spent on annotating thousands of lines of code,
-            and its basically useless at runtime? (Well, except <code>NamedTuple</code> and friends)
-        </p>
-        <p>
-            <a href="https://typeguard.readthedocs.io/en/latest/#checking-types-directly">Typeguard</a> to the rescue!
-        </p>
-    </main>
+    <p>
+        The <code>typing</code> module doesn't make python a statically typed language.
+        The interpreter is still the same duck-typed goo that we all love.
+    </p>
+    <p>
+        The interpreter doesn't have any special knowledge about the types in the <code>typing</code> module.
+        It <i>semantically ignores</i> all type annotations in code.
+    </p>
+    <p>
+        Take the following snippet -
+    </p>
+    <pre><code>names: typing.List[str] = ["guido", "tim", "barry"]</code></pre>
+    <p>
+        From the perspective of the interpreter, the object pointed to by <code>names</code> is a <code>list</code>.
+        There's no discrimination based on the specific container type.
+        <code>typing.List&lt;typing.Any&gt;</code>, <code>typing.List&lt;int&gt;</code> and <code>typing.List&lt;bool&gt;</code>
+        are all the same <code>list</code> type, internally.
+    </p>
+    <p>
+        Which is the reason why the following, surprisingly, raises a <code>TypeError</code> -
+    </p>
+    <pre><code>isinstance(names, typing.List[str])</code></pre>
+    <p>
+        This is all very unfortunate. All that work spent on annotating thousands of lines of code,
+        and its basically useless at runtime? (Well, except <code>NamedTuple</code> and friends)
+    </p>
+    <p>
+        <a href="https://typeguard.readthedocs.io/en/latest/#checking-types-directly">Typeguard</a> to the rescue!
+    </p>
 {% endblock %}
