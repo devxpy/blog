@@ -1,17 +1,44 @@
 #!/usr/bin/env python3
-import os
+import json
 import shutil
 import subprocess
-import typing
-from itertools import chain
 from pathlib import Path
+import importlib.util
 
 import click
 import uvicorn
 from jinja2 import Environment, FileSystemLoader
-from starlette.responses import Response, HTMLResponse
+from starlette.applications import Starlette
+from starlette.responses import HTMLResponse
+from starlette.routing import Mount
 from starlette.staticfiles import StaticFiles
-from starlette.types import Scope
+
+_global_options = [
+    click.option(
+        "--templates-dir",
+        "-t",
+        default="templates",
+        type=click.Path(exists=True, file_okay=False, resolve_path=True),
+    ),
+    click.option(
+        "--context",
+        "-c",
+        default="context.py",
+        type=click.Path(dir_okay=False, resolve_path=True, exists=True),
+    ),
+    click.option(
+        "--static-dir",
+        "-s",
+        default="static",
+        type=click.Path(file_okay=False, resolve_path=True, exists=True),
+    ),
+]
+
+
+def global_options(func):
+    for option in reversed(_global_options):
+        func = option(func)
+    return func
 
 
 @click.group()
@@ -20,75 +47,107 @@ def cli():
 
 
 class JinjaStaticFiles(StaticFiles):
-    async def lookup_path(
-        self, path: str
-    ) -> typing.Tuple[str, typing.Optional[os.stat_result]]:
-        # enable lookup of files without the html suffix
-        html_files = Path(self.directory).rglob("*.html")
-        if path in (f.stem for f in html_files):
-            path += ".html"
+    def __init__(self, *args, context_file: str, **kwargs):
+        self.context_file = context_file
+        super().__init__(*args, **kwargs)
 
-        return await super().lookup_path(path)
+    async def get_response(self, path, scope):
+        if path.endswith(".html"):
+            raise ValueError("Please remove '.html' from the url.")
+        return await super().get_response(path, scope)
 
-    def file_response(
-        self,
-        full_path: str,
-        stat_result: os.stat_result,
-        scope: Scope,
-        status_code: int = 200,
-    ) -> Response:
-        if not full_path.endswith(".html"):
-            return super().file_response(full_path, stat_result, scope, status_code)
+    async def lookup_path(self, path):
+        ret = await super().lookup_path(path)
+        if any(ret):
+            return ret
+        return await super().lookup_path(f"{path}.html")
 
-        text = render_template(full_path, self.directory)
+    def file_response(self, full_path, stat_result, scope, status_code=200):
+        text = render_template(full_path, self.directory, self.context_file)
         return HTMLResponse(text, status_code=status_code)
 
 
 @cli.add_command
 @click.command()
-@click.argument("SRC", type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def serve(src):
-    subprocess.Popen(
-        ["browser-sync", "start", "--proxy", "localhost:8000", "--files", f"{src}/**/*"]
+@global_options
+def serve(templates_dir, context, static_dir):
+    static_dir = Path(static_dir)
+    templates_dir = Path(templates_dir)
+    args = [
+        "browser-sync",
+        "start",
+        "--proxy",
+        "localhost:8000",
+        "--files",
+        f"{templates_dir}/**/*",
+        f"{static_dir}/**/*",
+    ]
+    print("$", " ".join(args))
+    subprocess.Popen(args)
+
+    app = Starlette(
+        routes=[
+            Mount("/static/", StaticFiles(directory=static_dir)),
+            Mount(
+                "/",
+                JinjaStaticFiles(
+                    directory=templates_dir, html=True, context_file=context
+                ),
+            ),
+        ],
+        debug=True,
     )
-    app = JinjaStaticFiles(directory=src, html=True)
-    uvicorn.run(app)
+    uvicorn.run(app, debug=True)
 
 
 @cli.add_command
 @click.command()
-@click.argument("SRC", type=click.Path(exists=True, file_okay=False, resolve_path=True))
-@click.argument("DEST", type=click.Path(file_okay=False, resolve_path=True))
-def build(src, dest):
-    src = Path(src)
-    dest = Path(dest)
+@click.option(
+    "--output-dir",
+    "-o",
+    default="public",
+    type=click.Path(file_okay=False, resolve_path=True),
+)
+@global_options
+def build(templates_dir, output_dir, context, static_dir):
+    templates_dir = Path(templates_dir)
+    output_dir = Path(output_dir)
+    static_dir = Path(static_dir)
 
-    dest.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    for html_src in src.rglob("*.html"):
-        text = render_template(str(html_src), str(src))
+    for src in templates_dir.rglob("*.html"):
+        build_template(src, output_dir, templates_dir, context)
 
-        rel_path = html_src.relative_to(src)
-        if html_src.name == "index.html":
-            dest_path = dest / rel_path
-        else:
-            dest_dir = dest / rel_path.parent / rel_path.stem
-            dest_dir.mkdir(parents=True, exist_ok=True)
-            dest_path = dest_dir / "index.html"
-
-        dest_path.write_text(text)
-
-    for static_src in chain(src.rglob("*.css"), src.rglob("*.js")):
-        rel_path = static_src.relative_to(src)
-        static_dest = dest / rel_path
-        shutil.copy(static_src, static_dest)
+    shutil.copy(static_dir, output_dir)
 
 
-def render_template(full_path, directory):
+def build_template(src, output_dir, templates_dir, context):
+    text = render_template(str(src), str(templates_dir), context)
+
+    rel_path = src.relative_to(templates_dir)
+    if src.name == "index.html":
+        dest = output_dir / rel_path
+    else:
+        dest = output_dir / rel_path.parent / rel_path.stem
+        dest.mkdir(parents=True, exist_ok=True)
+        dest = dest / "index.html"
+
+    dest.write_text(text)
+
+
+def render_template(full_path, directory, context_file):
     env = Environment(loader=FileSystemLoader(directory))
+
+    spec = importlib.util.spec_from_file_location(Path(context_file).name, context_file)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    ctx = mod.get_context(env)
+
     rel_path = str(Path(full_path).relative_to(directory))
     template = env.get_template(rel_path)
-    text = template.render()
+
+    text = template.render(**ctx)
     return text
 
 

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% from 'widgets/local-date.html' import local_date %}
+
+{% block head %}
+    <link rel="stylesheet" href="/static/post.css">
+{% endblock %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+
+{% block body %}
+    {% block graphic %}{% endblock %}
+
+    <div class="post-title">
+        <h1>
+            <a href="{{ post.path }}">
+                {{ post.title }}
+            </a>
+        </h1>
+        <span>
+            Posted on {{ local_date(post.time) }}
+        </span>
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}

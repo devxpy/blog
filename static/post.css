@@ -1,0 +1,20 @@
+code {
+    background: #e1f1df;
+}
+
+.post-title {
+    text-align: center;
+    margin: 0;
+    padding: 1%;
+}
+
+.post-title h1 {
+    background: -webkit-linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.post-title span {
+    color: grey;
+    font-size: 0.95em;
+}

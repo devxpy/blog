@@ -1,0 +1,15 @@
+{% macro local_date(time_sec) %}
+    {% set id = randid() %}
+    <span style="white-space: nowrap;" id="{{ id }}"></span>
+    <script>
+        (function () {
+            let el = document.getElementById("{{ id }}");
+            let date = new Date("{{ time_sec }}" * 1000);
+            el.innerHTML = date.toLocaleString(undefined, {
+                month: "long",
+                year: "numeric",
+                day: "numeric"
+            });
+        })();
+    </script>
+{% endmacro %}

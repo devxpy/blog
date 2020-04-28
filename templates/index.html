@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from 'widgets/local-date.html' import local_date %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <div class="art-container">
+    <pre class="art" style="color: grey">
+ ...................................................................................................................................
+.   o   \ o /  _ o        __|    \ /     |__         o _  \ o /   o   \ o /  _ o        __|    \ /     |__         o _  \ o /   o   .
+.  /|\    |     /\   __\o   \o    |    o/     o/__   /\     |    /|\    |     /\   __\o   \o    |    o/     o/__   /\     |    /|\  .
+.  / \   / \   | \  /) |    ( \  /o\  / )    |   (\  / |   / \   / \   / \   | \  /) |    ( \  /o\  / )    |   (\  / |   / \   / \  .
+ ...................................................................................................................................
+    </pre>
+    </div>
+
+    <main>
+        <table>
+            {% for post in posts | reverse %}
+                <tr>
+                    <td>
+                        {{ local_date(post.time) }}
+                    </td>
+                    <td>
+                        <a href="{{ post.path }}">{{ post.title }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </main>
+{% endblock %}

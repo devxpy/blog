@@ -1,0 +1,9 @@
+{% macro infinite_loop(child) %}
+    <div class="infinite-loop--outer">
+        <div>
+            <div class="infinite-loop"><div class="infinite-loop--content">{{ child }}&nbsp;</div></div>
+        </div>
+    </div>
+    {{ cssfiles.add("/static/infinite-loop.css") or "" }}
+    {{ jsfiles.add('/static/infinite-loop.js') or "" }}
+{% endmacro %}
