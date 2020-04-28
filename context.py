@@ -1,11 +1,12 @@
 import string
-from pathlib import Path
-from random import choices
+from random import choices, seed
 
 from jinja2 import Environment
 
 
 def get_context(env: Environment):
+    seed(42)
+
     env.globals.update(
         {
             "randid": lambda: "".join(choices(string.ascii_lowercase, k=8)),
