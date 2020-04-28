@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-import json
+import importlib.util
 import shutil
 import subprocess
 from pathlib import Path
-import importlib.util
 
 import click
 import uvicorn
@@ -20,6 +19,7 @@ _global_options = [
         default="templates",
         type=click.Path(exists=True, file_okay=False, resolve_path=True),
     ),
+    click.option("--exclude", "-e"),
     click.option(
         "--context",
         "-c",
@@ -109,17 +109,22 @@ def serve(templates_dir, context, static_dir):
     type=click.Path(file_okay=False, resolve_path=True),
 )
 @global_options
-def build(templates_dir, output_dir, context, static_dir):
+def build(templates_dir, output_dir, context, static_dir, exclude):
     templates_dir = Path(templates_dir)
     output_dir = Path(output_dir)
     static_dir = Path(static_dir)
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    exclude = list(Path(templates_dir).rglob(exclude))
+
     for src in templates_dir.rglob("*.html"):
+        if src in exclude:
+            continue
         build_template(src, output_dir, templates_dir, context)
 
-    shutil.copy(static_dir, output_dir)
+    shutil.rmtree(output_dir / static_dir.name)
+    shutil.copytree(static_dir, output_dir / static_dir.name)
 
 
 def build_template(src, output_dir, templates_dir, context):
