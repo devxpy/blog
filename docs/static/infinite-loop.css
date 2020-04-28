@@ -1,0 +1,21 @@
+.infinite-loop--outer {
+    overflow: hidden;
+}
+
+.infinite-loop--outer div {
+    display: inline-block;
+}
+
+.infinite-loop {
+    white-space: nowrap;
+    animation: infinite-loop--anim 20s linear infinite;
+}
+
+@keyframes infinite-loop--anim {
+    0% {
+        margin-left: 0;
+    }
+    100% {
+        margin-left: -50%
+    }
+}

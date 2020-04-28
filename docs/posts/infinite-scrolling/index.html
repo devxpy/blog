@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        ASCII DISCO - 
+    Continuous, infinite scrolling with wrap-around in HTML/CSS/JS
+
+    </title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&Lexend+Deca&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css">
+
+    <link rel="stylesheet" href="/static/base.css">
+    <link rel="stylesheet" href="/static/infinite-loop.css">
+
+    
+    <link rel="stylesheet" href="/static/post.css">
+
+</head>
+<body>
+
+<a href="/" class="title">ASCII<br>DISCO</a>
+
+<div class="infinite-loop--outer">
+    <div>
+        <div class="infinite-loop"><div class="infinite-loop--content"><pre style="display:inline-block;"></pre></div></div>
+    </div>
+</div>
+
+
+    <div class="post-title">
+        <h1>
+            <a href="/posts/infinite-scrolling">
+                Continuous, infinite scrolling with wrap-around in HTML/CSS/JS
+            </a>
+        </h1>
+        <span>
+            Posted on 
+    
+    <span style="white-space: nowrap;" id="detuvndq"></span>
+    <script>
+        (function () {
+            let el = document.getElementById("detuvndq");
+            let date = new Date("1588062591.499132" * 1000);
+            el.innerHTML = date.toLocaleString(undefined, {
+                month: "long",
+                year: "numeric",
+                day: "numeric"
+            });
+        })();
+    </script>
+
+        </span>
+    </div>
+
+    <main>
+        
+    <style>
+        .example {
+            width: 200px;
+            margin: auto
+        }
+    </style>
+
+    <p>
+        This is one of those things that seem really simple on paper,
+        but are weirdly complex to actually implement.
+    </p>
+
+    <h2>Good ol' marquee</h2>
+
+    <p>
+        Let's start with the simplest possible <code>marquee</code> tag.
+    </p>
+
+    <pre><code>&lt;marquee&gt;Hello, World&lt;/marquee&gt;</code></pre>
+    <div class="example">
+        <marquee>Hello, World</marquee>
+    </div>
+
+    <p>We can try repeating the content -</p>
+
+    <pre><code class="jinja2">&lt;marquee&gt;
+    Hello, World
+    Hello, World
+&lt;/marquee&gt;</code></pre>
+
+    <div class="example">
+        <marquee>
+            Hello, World
+            Hello, World
+        </marquee>
+    </div>
+
+    - but it doesnt't help much. There text wrapping is not <i>continuous</i>.
+
+    <h2>Let's fix marquee</h2>
+
+    <p>
+        This is where things get hairy. marquee by default, doesn't have a way to make text wrapping continuous.
+        We must re-implement the marquee tag in some custom code.
+    </p>
+
+    <p>
+        Basic markup-
+    </p>
+
+    <pre><code>&lt;style&gt;
+    #outer {
+        border: 2px solid red;
+    }
+
+    #outer div {
+        display: inline-block;
+    }
+
+    #loop {
+        white-space: nowrap;
+    }
+&lt;/style&gt;
+
+&lt;div id=&#34;outer&#34;&gt;
+    &lt;!-- This div is important! It lets us specify margin-left as percentage later on. --&gt;
+    &lt;div&gt;
+        &lt;div id=&#34;loop&#34;&gt;&lt;div id=&#34;content&#34;&gt;Hello, World&amp;nbsp;&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+
+    <style>
+        #outer1 {
+            border: 2px solid red;
+        }
+
+        #outer1 div {
+            display: inline-block;
+        }
+
+        #loop1 {
+            white-space: nowrap;
+        }
+    </style>
+    <div class="example">
+
+        <div id="outer1">
+            <div>
+                <div id="loop1">
+                    <div id="content1">Hello, World&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p>
+        First, we repeat the <code>innerHTML</code> of the content till it "fills up" at least the width of the outer
+        container. Doing this in JS, as opposed to manually writing the text a bunch of times makes this code responsive
+        to all screen sizes.
+    </p>
+
+    <pre><code>let outer = document.querySelector("#outer")
+let content = document.querySelector("#content");
+
+repeatContent(content, outer.offsetWidth);</code></pre>
+
+    <p><code>repeatContent</code> takes any DOM element and repeats it's <code>innerHTML</code> till it reaches a
+        desired
+        cut-off</p>
+
+    <pre><code>function repeatContent(el, till) {
+    let html = el.innerHTML;
+    let counter= 0; // prevents infinite loop
+
+    while (el.offsetWidth < till && counter < 100) {
+        el.innerHTML += html;
+        counter += 1;
+    }
+}</code></pre>
+
+    <div class="example">
+        <style>
+            #outer {
+                border: 2px solid red;
+            }
+
+            #outer div {
+                display: inline-block;
+            }
+
+            #loop {
+                white-space: nowrap;
+            }
+        </style>
+        <div id="outer">
+            <div>
+                <div id="loop">
+                    <div id="content">Hello, World&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function repeatContent(el, till) {
+            let html = el.innerHTML;
+            let counter = 0; // prevents infinite loop
+
+            while (el.offsetWidth < till || counter > 100) {
+                el.innerHTML += html;
+                counter += 1;
+            }
+        }
+
+        (function () {
+            let outer = document.querySelector("#outer")
+            let content = document.querySelector("#content");
+            repeatContent(content, outer.offsetWidth);
+        })();
+    </script>
+
+    <p>
+        Next, we add some animation using CSS
+    </p>
+
+    <pre><code>#loop {
+    animation: loop-anim 5s linear infinite;
+}
+
+@keyframes loop-anim {
+    0% {
+        margin-left: 0;
+    }
+    100% {
+        margin-left: -50% /* This works because of the div between "outer" and "loop" */
+    }
+}</code></pre>
+
+    <div class="example">
+        <style>
+            #outer2 {
+                border: 2px solid red;
+            }
+
+            #outer2 div {
+                display: inline-block;
+            }
+
+            #loop2 {
+                white-space: nowrap;
+                animation: infinite-loop--anim 5s linear infinite;
+            }
+        </style>
+        <div id="outer2">
+            <div>
+                <div id="loop2">
+                    <div id="content2">Hello, World&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            let outer = document.querySelector("#outer2")
+            let content = document.querySelector("#content2");
+            repeatContent(content, outer.offsetWidth);
+        })();
+    </script>
+
+    <p>
+        We also need to repeat the content itself, twice. so everything looks continuous, and there are no empty spaces
+        in the animation. JS comes in handy here -
+    </p>
+
+    <pre><code>let el = outer.querySelector('#loop');
+el.innerHTML = el.innerHTML + el.innerHTML;</code></pre>
+
+    <div class="example">
+        <style>
+            #outer3 {
+                border: 2px solid red;
+            }
+
+            #outer3 div {
+                display: inline-block;
+            }
+
+            #loop3 {
+                white-space: nowrap;
+                animation: infinite-loop--anim 5s linear infinite;
+            }
+        </style>
+        <div id="outer3">
+            <div>
+                <div id="loop3">
+                    <div id="content3">Hello, World&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            let outer = document.querySelector("#outer3")
+            let content = document.querySelector("#content3");
+            repeatContent(content, outer.offsetWidth);
+
+            let el = outer.querySelector('#loop3');
+            el.innerHTML = el.innerHTML + el.innerHTML;
+        })();
+    </script>
+
+
+    <p>
+        Add some colours to visualize what's actually going on here -
+    </p>
+
+    <pre><code>&lt;style&gt;
+    #loop div:nth-child(1) {
+        background: rgba(154, 255, 102, 0.2);
+    }
+
+    #loop div:nth-child(2) {
+        background: rgba(123, 235, 255, 0.2);
+    }
+&lt;/style&gt;</code></pre>
+
+    <style>
+        .show-loop .infinite-loop--outer {
+            overflow: visible;
+            border: 2px solid red;
+        }
+
+        .show-loop .infinite-loop div:nth-child(1) {
+            background: rgba(154, 255, 102, 0.2);
+        }
+
+        .show-loop .infinite-loop div:nth-child(2) {
+            background: rgba(123, 235, 255, 0.2);
+        }
+    </style>
+
+    <div class="example show-loop">
+        
+    <div class="infinite-loop--outer">
+        <div>
+            <div class="infinite-loop"><div class="infinite-loop--content">Hello, World!&nbsp;</div></div>
+        </div>
+    </div>
+
+    </div>
+
+    <p>
+        Here's what it looks like without any of the styling
+    </p>
+    <div class="example">
+        
+    <div class="infinite-loop--outer">
+        <div>
+            <div class="infinite-loop"><div class="infinite-loop--content">Hello, World!&nbsp;</div></div>
+        </div>
+    </div>
+
+    </div>
+
+    <p>
+        Perfect, right?! This is the same technique used on this blog to show the beautiful moving ASCII art :).
+        Full code can be found in this <a target="_blank" href="https://stackoverflow.com/a/61480583/7061265">Stack Overflow</a> answer.
+    </p>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+<footer>
+    <p>
+        <a target="_blank" href="https://twitter.com/devxpy"><img height="28em" alt="Twitter Follow"
+                                                                  src="https://img.shields.io/twitter/follow/devxpy?style=social"></a>
+        <a target="_blank" href="http://github.com/devxpy"><img height="28em" alt="GitHub followers"
+                                                                src="https://img.shields.io/github/followers/devxpy?style=social"></a>
+    </p>
+    <p>
+        Art stolen from the <a target="_blank" href="https://www.asciiart.eu/">ASCII Art Archive</a>
+        |
+        Rendered using <a target="_blank" href="https://jinja.palletsprojects.com/en/2.11.x/">Jinja</a>
+    </p>
+</footer>
+
+<script src="/static/infinite-loop.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        ASCII DISCO - 
+    Python's missing runtime type checker
+
+    </title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&Lexend+Deca&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css">
+
+    <link rel="stylesheet" href="/static/base.css">
+    <link rel="stylesheet" href="/static/infinite-loop.css">
+
+    
+    <link rel="stylesheet" href="/static/post.css">
+
+</head>
+<body>
+
+<a href="/" class="title">ASCII<br>DISCO</a>
+
+<div class="infinite-loop--outer">
+    <div>
+        <div class="infinite-loop"><div class="infinite-loop--content"><pre style="display:inline-block;">        _      
+      >(')____,
+        (` =~~/
+~^~^~^~^`---'~^</pre></div></div>
+    </div>
+</div>
+
+
+    <div class="post-title">
+        <h1>
+            <a href="/posts/missing-type-checker">
+                Python's missing runtime type checker
+            </a>
+        </h1>
+        <span>
+            Posted on 
+    
+    <span style="white-space: nowrap;" id="wznoqluu"></span>
+    <script>
+        (function () {
+            let el = document.getElementById("wznoqluu");
+            let date = new Date("1587906406.8684" * 1000);
+            el.innerHTML = date.toLocaleString(undefined, {
+                month: "long",
+                year: "numeric",
+                day: "numeric"
+            });
+        })();
+    </script>
+
+        </span>
+    </div>
+
+    <main>
+        
+    <main>
+        <p>
+            The <code>typing</code> module doesn't make python a statically typed language.
+            The interpreter is still the same duck-typed goo that we all love.
+        </p>
+        <p>
+            The interpreter doesn't have any special knowledge about the types in the <code>typing</code> module.
+            It <i>semantically ignores</i> all type annotations in code.
+        </p>
+        <p>
+            Take the following snippet -
+        </p>
+        <pre><code>names: typing.List[str] = ["guido", "tim", "barry"]</code></pre>
+        <p>
+            From the perspective of the interpreter, the object pointed to by <code>names</code> is a <code>list</code>.
+            There's no discrimination based on the specific container type.
+            <code>typing.List&lt;typing.Any&gt;</code>, <code>typing.List&lt;int&gt;</code> and <code>typing.List&lt;bool&gt;</code>
+            are all the same <code>list</code> type, internally.
+        </p>
+        <p>
+            Which is the reason why the following, surprisingly, raises a <code>TypeError</code> -
+        </p>
+        <pre><code>isinstance(names, typing.List[str])</code></pre>
+        <p>
+            This is all very unfortunate. All that work spent on annotating thousands of lines of code,
+            and its basically useless at runtime? (Well, except <code>NamedTuple</code> and friends)
+        </p>
+        <p>
+            <a href="https://typeguard.readthedocs.io/en/latest/#checking-types-directly">Typeguard</a> to the rescue!
+        </p>
+    </main>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+<footer>
+    <p>
+        <a target="_blank" href="https://twitter.com/devxpy"><img height="28em" alt="Twitter Follow"
+                                                                  src="https://img.shields.io/twitter/follow/devxpy?style=social"></a>
+        <a target="_blank" href="http://github.com/devxpy"><img height="28em" alt="GitHub followers"
+                                                                src="https://img.shields.io/github/followers/devxpy?style=social"></a>
+    </p>
+    <p>
+        Art stolen from the <a target="_blank" href="https://www.asciiart.eu/">ASCII Art Archive</a>
+        |
+        Rendered using <a target="_blank" href="https://jinja.palletsprojects.com/en/2.11.x/">Jinja</a>
+    </p>
+</footer>
+
+<script src="/static/infinite-loop.js"></script>
+
+</body>
+</html>
