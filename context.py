@@ -1,13 +1,17 @@
 import string
+from pathlib import Path
 from random import choices
 
+from jinja2 import Environment
 
-def get_context(env):
+
+def get_context(env: Environment):
     env.globals.update(
         {
             "randid": lambda: "".join(choices(string.ascii_lowercase, k=8)),
             "jsfiles": set(),
             "cssfiles": set(),
+            "render": lambda x: env.get_template(x).render(),
         }
     )
 

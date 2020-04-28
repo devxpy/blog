@@ -17,20 +17,6 @@ body {
     }
 }
 
-.art-container {
-    text-align: center;
-    overflow-x: hidden;
-}
-
-.art-container .art {
-    display: inline-block;
-    text-align: left;
-    overflow-x: hidden;
-
-    margin-left: -100%;
-    margin-right: -100%;
-}
-
 main {
     min-height: 50vh;
     padding: 5%;

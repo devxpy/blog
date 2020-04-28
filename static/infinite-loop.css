@@ -8,7 +8,7 @@
 
 .infinite-loop {
     white-space: nowrap;
-    animation: infinite-loop--anim 5s linear infinite;
+    animation: infinite-loop--anim 20s linear infinite;
 }
 
 @keyframes infinite-loop--anim {

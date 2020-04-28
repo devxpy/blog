@@ -10,12 +10,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/default.min.css">
 
     <link rel="stylesheet" href="/static/base.css">
+    <link rel="stylesheet" href="/static/infinite-loop.css">
 
     {% block head %}{% endblock %}
 </head>
 <body>
 
 <a href="/" class="title">ASCII<br>DISCO</a>
+
+<div class="infinite-loop--outer">
+    <div>
+        <div class="infinite-loop"><div class="infinite-loop--content"><pre style="display:inline-block;">{% block graphic %}{% endblock %}</pre></div></div>
+    </div>
+</div>
 
 {% block body %}{% endblock %}
 
@@ -33,12 +40,7 @@
     </p>
 </footer>
 
-{% for path in cssfiles %}
-    <link rel="stylesheet" href="{{ path }}">
-{% endfor %}
-{% for path in jsfiles %}
-    <script src="{{ path }}"></script>
-{% endfor %}
+<script src="/static/infinite-loop.js"></script>
 
 </body>
 </html>

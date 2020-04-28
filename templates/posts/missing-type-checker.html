@@ -1,15 +1,7 @@
 {% extends "post.html" %}
-{% set post = posts[1] %}
+{% set post = posts[0] %}
 
-{% block graphic %}
-    {% with child="\
-    _
-  >(')____,
-    (` =~~/
-~^~^`---'~^" %}
-        {% include 'widgets/infinite-loop.html' %}
-    {% endwith %}
-{% endblock %}
+{% block graphic %}{% include 'duck.txt' %}{% endblock %}
 
 {% block content %}
     <main>

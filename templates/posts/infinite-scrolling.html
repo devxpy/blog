@@ -1,7 +1,14 @@
 {% extends "post.html" %}
-{% from 'widgets/infinite-loop.html' import infinite_loop %}
 
 {% set post = posts[1] %}
+
+{% macro infinite_loop(child) %}
+    <div class="infinite-loop--outer">
+        <div>
+            <div class="infinite-loop"><div class="infinite-loop--content">{{ child }}&nbsp;</div></div>
+        </div>
+    </div>
+{% endmacro %}
 
 {% block content %}
     <style>
@@ -117,9 +124,9 @@ repeatContent(content, outer.offsetWidth);</code></pre>
 
     <pre><code>function repeatContent(el, till) {
     let html = el.innerHTML;
-    let counter = 0; // prevents infinite loop
+    let counter= 0; // prevents infinite loop
 
-    while (el.offsetWidth < till || counter > 500) {
+    while (el.offsetWidth < till && counter < 100) {
         el.innerHTML += html;
         counter += 1;
     }
@@ -153,7 +160,7 @@ repeatContent(content, outer.offsetWidth);</code></pre>
             let html = el.innerHTML;
             let counter = 0; // prevents infinite loop
 
-            while (el.offsetWidth < till || counter > 500) {
+            while (el.offsetWidth < till || counter > 100) {
                 el.innerHTML += html;
                 counter += 1;
             }
